@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import List  from "./components/List";
 import "../src/App.css";
 
 export default function App()  {
@@ -6,22 +7,7 @@ export default function App()  {
 const [todoDate, setTodoDate] = useState([]);
 const [value, setValue] = useState("");
 
-  const getStyle = (completed) => {
-    return {
-      marinBottom:"10px",
-      padding: "10px",
-      borderTop: "1px #ccc dotted",
-      borderBottom: "1px #ccc dotted",
-      textDecoration: completed ? " line-through" : "none",
-    }
-  }
 
-
-  const handleClick = (id) => {
-    let newTodoData = todoDate.filter(data => data.id !== id);
-    console.log("newTodoData", newTodoData);
-    setTodoDate(newTodoData)
-  }
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -39,16 +25,6 @@ const [value, setValue] = useState("");
     setValue("");
   }
 
-  const handleCompleChange = (id) => {
-    let newTodoData = todoDate.map((data) => {
-      if (data.id === id) {
-        data.completed = !data.completed
-      }
-      return data;
-    });
-
-    setTodoDate(newTodoData);
-  }
 
 
     return(
@@ -58,23 +34,8 @@ const [value, setValue] = useState("");
             <h1>할일 목록</h1>  
           </div>
         </div>
-      {todoDate.map((data) => (
-        <div style={getStyle(data.completed)} key={data.id} className="list">
-          <input 
-            type="checkbox" 
-            defaultChecked={false}
-            onChange={()=> handleCompleChange(data.id)}
-          />
-          {data.title}
-          <button 
-          onClick={() => handleClick(data.id)}
-          className="submit-btn"
-          >
-          x
-          </button>
-        </div>      
-      ))}
 
+      <List todoDate={todoDate} setTodoDate={setTodoDate} />
 
       <form style={{display:'flex'}} onSubmit={handleSubmit}>
         <input 
