@@ -44,6 +44,8 @@ input[type="text"] {
 }
 input[type="checkbox"] {
   cursor: pointer;
+  vertical-align: middle;
+  margin-right: 10px;
 }
 
 input:focus {

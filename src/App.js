@@ -1,24 +1,12 @@
-import React, {Component} from "react";
+import React, { useState } from "react";
 import "../src/App.css";
 
-export default class App extends Component {
-  state = {
-    todoDate : [
-    ],
-    value : ""
-  }
+export default function App()  {
 
-  // style
-  // btnStyle = {
-  //   color: "#fff",
-  //   border: "none",
-  //   padding: "5px 9px",
-  //   borderRadius: "50%",
-  //   cursor: "pointer",
-  //   float:"right"
-  // }
+const [todoDate, setTodoDate] = useState([]);
+const [value, setValue] = useState("");
 
-  getStyle = (completed) => {
+  const getStyle = (completed) => {
     return {
       marinBottom:"10px",
       padding: "10px",
@@ -29,41 +17,40 @@ export default class App extends Component {
   }
 
 
-  handleClick = (id) => {
-    let newTodoData = this.state.todoDate.filter(data => data.id !== id);
+  const handleClick = (id) => {
+    let newTodoData = todoDate.filter(data => data.id !== id);
     console.log("newTodoData", newTodoData);
-    this.setState({ todoDate: newTodoData});
+    setTodoDate(newTodoData)
   }
 
-  handleChange = (e) => {
-    this.setState({value: e.target.value})
+  const handleChange = (e) => {
+    setValue(e.target.value);
   }
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     let newTodo = {
       id: Date.now(),
-      title : this.state.value,
+      title : value,
       completed: false
     }
-    this.setState({ todoDate: [...this.state.todoDate, newTodo], value : ""})
+    setTodoDate((prev)=> [...prev, newTodo]);
+    setValue("");
   }
 
-  handleCompleChange = (id) => {
-    let newTodoData = this.state.todoDate.map((data) => {
+  const handleCompleChange = (id) => {
+    let newTodoData = todoDate.map((data) => {
       if (data.id === id) {
         data.completed = !data.completed
       }
       return data;
     });
-    this.setState({ todoDate:newTodoData})
+
+    setTodoDate(newTodoData);
   }
 
 
-
-
-  render () {
     return(
       <div className="container">
         <div className="todoBlock">
@@ -71,17 +58,16 @@ export default class App extends Component {
             <h1>할일 목록</h1>  
           </div>
         </div>
-      {this.state.todoDate.map((data) => (
-        <div style={this.getStyle(data.completed)} key={data.id} className="list">
+      {todoDate.map((data) => (
+        <div style={getStyle(data.completed)} key={data.id} className="list">
           <input 
             type="checkbox" 
             defaultChecked={false}
-            onChange={()=> this.handleCompleChange(data.id)}
+            onChange={()=> handleCompleChange(data.id)}
           />
           {data.title}
           <button 
-          style={this.btnStyle}
-          onClick={() => this.handleClick(data.id)}
+          onClick={() => handleClick(data.id)}
           className="submit-btn"
           >
           x
@@ -90,19 +76,18 @@ export default class App extends Component {
       ))}
 
 
-      <form style={{display:'flex'}} onSubmit={this.handleSubmit}>
+      <form style={{display:'flex'}} onSubmit={handleSubmit}>
         <input 
           type="text" 
           name="value" 
           style={{ flex:"10", padding: "5px"}} 
           placeholder="해야할일을 입력하세요." 
-          value={this.state.value}
-          onChange={this.handleChange}
+          value={value}
+          onChange={handleChange}
         />
         <input type="submit" name="입력" className="btn" style={{ flex:"1"}}/>
 
       </form>
       </div>
     )
-  }
 }
